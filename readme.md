@@ -1,4 +1,4 @@
-# Skydev
+# zoar
 
 A lightweight, human-readable shorthand for building websites. Write clean, readable code and see your page come to life instantly — no HTML tags, no CSS files, no build steps.
 
@@ -6,9 +6,9 @@ A lightweight, human-readable shorthand for building websites. Write clean, read
 
 ---
 
-## What is Skydev?
+## What is zoar?
 
-Skydev is a symbolic web language designed to bridge the gap between abstract ideas and functional UI. It compiles to clean HTML and CSS, runs locally with no dependencies, and is fast by default.
+zoar is a symbolic web language designed to bridge the gap between abstract ideas and functional UI. It compiles to clean HTML and CSS, runs entirely in the browser with no dependencies, and is fast by default.
 
 - ✦ **No boilerplate** — every line does something visible
 - ✦ **Live preview** — changes render instantly as you type
@@ -19,19 +19,21 @@ Skydev is a symbolic web language designed to bridge the gap between abstract id
 
 ## The Editor
 
-Skydev comes with a built-in Monaco-powered editor (the same engine as VS Code) with:
+zoar comes with a built-in Monaco-powered editor (the same engine as VS Code) with:
 
-- Syntax highlighting for all Skydev tokens
+- Syntax highlighting for all zoar tokens
 - Auto-closing brackets and smart indentation
-- Live preview pane
+- Live preview pane with scroll position preserved
 - Multi-page project support
+- Asset manager — upload images, fonts, audio, and video
+- Pop-out preview window for full DevTools inspection
 - `Ctrl+S` to save, `Shift+Alt+F` to format
 
 ---
 
 ## Syntax
 
-Every `.sd` file is a page. Each line is an element. Styles go inside `[square brackets]`. Layout uses `{ curly braces }`.
+Every `.zoar` file is a page. Each line is an element. Styles go inside `[square brackets]`. Layout uses `{ curly braces }`.
 
 ### Elements
 
@@ -41,40 +43,148 @@ Every `.sd` file is a page. Each line is an element. Styles go inside `[square b
 | `##` | `<h2>` | `## Subheading [text-size-28]` |
 | `###` | `<h3>` | `### Small heading` |
 | `t` | `<p>` | `t Some paragraph text. [text-color-666666]` |
-| `:` | `<button>` | `: Click me [bg-black text-color-white inner-12 round-8]` |
+| `:` | `<button>` | `: Click me [bg-111111 text-color-ffffff inner-12 round-8]` |
+| `~` | `<a>` | `~ Visit us -> https://zoar.dev [text-color-ffb020 bold]` |
 | `>` | `<img>` | `> photo.jpg [w-full round-12]` |
 | `>>` | `<audio controls>` | `>> audio.mp3 [w-full]` |
 | `>>>` | `<video controls>` | `>>> video.mp4 [w-full round-12]` |
+| `<<` | `<iframe>` | `<< https://youtube.com/embed/xyz [w-full h-400 round-12]` |
 | `-` | `<ul><li>` | `- Item one` |
 | `1.` | `<ol><li>` | `1. First step` |
 | `/` | `<label>` | `/ Your name [bold text-size-14]` |
 | `_` | `<input>` | `_ Placeholder [border-1 round-8 inner-12]` |
 | `__` | `<textarea>` | `__ Write here... [border-1 round-8 inner-12 h-160]` |
+| `s` | `<summary>` | `s What is zoar?` |
+| `h` | table header row | `h Name, Age, City` |
 | `---` | `<hr>` | `---` |
 | `--` | `<br>` | `--` |
 | `{ }` | `<div>` | `{ ... } [flex col gap-16]` |
 | `//` | comment | `// This line is ignored` |
 
-### Navigation
+### Navigation & Links
 
-Use `-> /page` on any button to link to another page:
+Use `-> /page` on any button or link to navigate. External URLs open in a new tab automatically.
 
 ```
-: About us -> /about [bg-4f9eff text-color-white inner-12 round-8]
+// Button navigation (renders as <button>)
+: About us -> /about [bg-ffb020 text-color-ffffff inner-12 round-8]
+
+// Inline link (renders as <a>)
+~ Read the docs -> /docs [text-color-ffb020 underline]
+
+// External link — opens in new tab
+~ Visit us -> https://zoar.dev [bold]
+
+// Email link
+~ Contact -> mailto:contact@shepherd.games
 ```
 
-The filename maps directly to the route — `about.sd` → `/about`.
+The filename maps directly to the route — `about.zoar` → `/about`.
+
+### Metadata
+
+Add a `----` block at the very top of any `.zoar` file to set page metadata. It never appears on the page itself.
+
+```
+----
+title: My Page
+description: A short description for search engines.
+author: Your Name
+lang: en
+favicon: favicon.svg
+og-title: My Page
+og-description: Shown when shared on social media.
+og-image: assets/cover.jpg
+twitter-card: summary_large_image
+canonical: https://mysite.com/page
+----
+```
+
+### Table
+
+Wrap rows in `{ }` and add `[table]` to the closing brace. Use `h` for a header row.
+
+```
+{
+    h Feature, Free, Pro
+    Live Preview, ✓, ✓
+    Custom Fonts, ✓, ✓
+    Priority Support, ✗, ✓
+} [table]
+```
+
+No `h` line = no header, plain rows only.
+
+### Blockquote
+
+Use any block with `[blockquote]` on the closing brace:
+
+```
+{
+    t Design is not just what it looks like. Design is how it works. [italic leading-28]
+    t — Steve Jobs [text-size-13 bold text-color-888888 outer-t-8]
+} [blockquote]
+```
+
+### Accordion
+
+Wrap child blocks in an outer block with `[accordion]`. Use `s` for the clickable summary title.
+
+```
+{
+    {
+        s What is zoar?
+        t A markup language for building websites without writing CSS.
+    }
+    {
+        s Do I need to know HTML?
+        t No. zoar handles all the HTML and CSS for you.
+    }
+} [accordion]
+```
+
+### Embeds & iframes
+
+Use `<<` to embed any URL — YouTube, Google Maps, Figma, CodePen, or any other embeddable content. Just grab the `src` URL from the embed code — zoar handles all the iframe attributes automatically.
+
+```
+// YouTube video
+<< https://www.youtube.com/embed/dQw4w9WgXcQ [w-full h-400 round-12]
+
+// Google Map
+<< https://www.google.com/maps/embed?pb=... [w-full h-300 round-8]
+
+// Figma prototype
+<< https://www.figma.com/embed?embed_host=share&url=... [w-full h-600]
+```
+
+All standard style tokens work — `w-`, `h-`, `round-`, `border-`, `shadow-` etc.
+
+### Custom Fonts
+
+Upload any font file (`.ttf`, `.woff2`, `.otf`, `.woff`) via the Assets panel. The utility name is derived from the filename — lowercased, spaces and underscores become hyphens.
+
+```
+// Upload roboto.woff2 → use font-roboto
+# Hello [font-roboto bold text-size-48]
+
+// Upload Playfair Display.ttf → use font-playfair-display
+t Body text [font-playfair-display text-size-16]
+
+// Apply to an entire block
+} [font-roboto flex col gap-16]
+```
 
 ### Forms
 
-Input type is set via the `input-type-*` style utility — it lives inside `[...]` alongside your other styles:
+Input type is set via `input-type-*` inside `[...]` alongside other styles:
 
 ```
 / Full name [bold text-size-14]
 _ Your name [border-1 round-8 inner-12 w-full]
 
 / Email [bold text-size-14]
-_ your@email.com [input-type-email border-1 round-8 inner-12 w-full]
+_ name@email.com [input-type-email border-1 round-8 inner-12 w-full]
 
 / Password [bold text-size-14]
 _ Password [input-type-password border-1 round-8 inner-12 w-full]
@@ -85,11 +195,11 @@ _ [input-type-radio]
 __ Tell us more... [border-1 round-8 inner-12 w-full h-160]
 ```
 
-Supported types: `input-type-text` (default), `input-type-email`, `input-type-password`, `input-type-number`, `input-type-checkbox`, `input-type-radio`.
+Supported input types: `text` (default), `email`, `password`, `number`, `tel`, `url`, `date`, `time`, `file`, `range`, `color`, `search`, `checkbox`, `radio`.
 
 ### Lists
 
-Consecutive `-` lines auto-group into a `<ul>`. Consecutive `1.` lines auto-group into a `<ol>`. Any non-list line ends the current list.
+Consecutive `-` lines auto-group into `<ul>`. Consecutive `1.` lines auto-group into `<ol>`.
 
 ```
 - Landing pages
@@ -97,7 +207,7 @@ Consecutive `-` lines auto-group into a `<ul>`. Consecutive `1.` lines auto-grou
 - Documentation
 
 1. Open a project folder
-2. Edit home.sd
+2. Edit home.zoar
 3. See it live instantly
 ```
 
@@ -150,6 +260,7 @@ bold              font-weight: 700
 semi-bold         font-weight: 600
 italic            font-style: italic
 underline         text-decoration: underline
+no-underline      text-decoration: none
 strikethrough     text-decoration: line-through
 caps              text-transform: uppercase
 lowercase         text-transform: lowercase
@@ -160,6 +271,8 @@ text-center       text-align: center
 text-right        text-align: right
 truncate          overflow: hidden; text-overflow: ellipsis; white-space: nowrap
 no-wrap           white-space: nowrap
+
+font-roboto       font-family: 'roboto', sans-serif  (custom font from assets/)
 ```
 
 #### Colors
@@ -178,11 +291,15 @@ outline-color-blue outline-color: blue
 flex              display: flex
 grid              display: grid
 block             display: block
+inline            display: inline
+inline-flex       display: inline-flex
 hidden            display: none
 row               flex-direction: row
 col               flex-direction: column
 wrap              flex-wrap: wrap
+nowrap            flex-wrap: nowrap
 grow              flex-grow: 1
+shrink            flex-shrink: 1
 center            align-items + justify-content: center
 between           justify-content: space-between
 justify-start     justify-content: flex-start
@@ -191,9 +308,11 @@ justify-evenly    justify-content: space-evenly
 items-center      align-items: center
 items-start       align-items: flex-start
 items-end         align-items: flex-end
+self-center       align-self: center
 grid-cols-3       grid-template-columns: repeat(3, 1fr)
 grid-rows-2       grid-template-rows: repeat(2, 1fr)
 col-span-2        grid-column: span 2
+col-span-full     grid-column: 1 / -1
 ```
 
 #### Borders & Radius
@@ -222,6 +341,8 @@ brightness-75     filter: brightness(0.75)
 overflow-hidden   overflow: hidden
 overflow-scroll   overflow: scroll
 overflow-auto     overflow: auto
+overflow-x-hidden overflow-x: hidden
+overflow-y-auto   overflow-y: auto
 ```
 
 #### Position
@@ -272,6 +393,7 @@ cursor-pointer        cursor: pointer
 cursor-not-allowed    cursor: not-allowed
 cursor-grab           cursor: grab
 select-none           user-select: none
+select-all            user-select: all
 pointer-none          pointer-events: none
 disabled              opacity: 0.5; cursor: not-allowed
 ```
@@ -295,15 +417,22 @@ tablet-grid-cols-2        @media (max-width: 1024px)
 
 ## Example
 
-```skydev
+```
+----
+title: Home
+description: Welcome to my zoar site.
+favicon: favicon.svg
+og-image: assets/cover.jpg
+----
+
 // Navbar
 {
-    # MySite [text-size-18 bold text-color-111111]
+    > logo.png [h-28]
     {
-        : Home [text-color-555 inner-8 round-6 hover-bg-f5f5f5 transition]
-        : About -> /about [text-color-555 inner-8 round-6 hover-bg-f5f5f5 transition]
+        : Home [text-color-555555 inner-8 round-6 hover-bg-f5f5f5 transition]
+        : About -> /about [text-color-555555 inner-8 round-6 hover-bg-f5f5f5 transition]
     } [flex row gap-4]
-    : Get Started [bg-111111 text-color-white inner-y-10 inner-x-20 round-8 hover-bg-333 transition]
+    : Get Started [bg-ffb020 text-color-ffffff inner-y-10 inner-x-20 round-8 hover-bg-e6a000 transition]
 } [flex row items-center justify-between inner-x-40 inner-y-16 border-b-1 border-color-eeeeee sticky top-0 z-100]
 
 // Hero
@@ -311,46 +440,65 @@ tablet-grid-cols-2        @media (max-width: 1024px)
     # Build websites without writing CSS. [text-size-52 bold text-color-111111 leading-60 max-w-700]
     t A new way to design for the web. [text-size-18 text-color-666666 leading-32]
     {
-        : Start Building [bg-111111 text-color-white inner-y-14 inner-x-32 round-10 hover-bg-333 transition]
-        : Read the Docs -> /docs [border-1 inner-y-14 inner-x-32 round-10 hover-bg-f5f5f5 transition]
+        : Start Building [bg-ffb020 text-color-ffffff inner-y-14 inner-x-32 round-10 hover-bg-e6a000 transition]
+        ~ Read the Docs -> /docs [text-color-111111 inner-y-14 inner-x-32 round-10 border-1 border-color-dddddd hover-bg-f5f5f5 transition]
     } [flex row gap-12]
 } [flex col gap-24 inner-x-40 inner-y-96 max-w-800]
 
-// Image
 > hero.jpg [w-full h-400]
 
 ---
 
-// Feature list
+// FAQ
 {
-    t What you can build [bold text-size-14]
-    - Landing pages
-    - Portfolio sites
-    - Product pages
-
-    t How to get started [bold text-size-14 outer-t-16]
-    1. Open a project folder
-    2. Edit home.sd
-    3. Export when ready
-} [flex col gap-8 inner-40 bg-fafafa border-1 border-color-eeeeee round-16]
-
-// Contact form
-{
-    / Your name [bold text-size-14]
-    _ Enter your name [border-1 round-8 inner-12 w-full]
-
-    / Email [bold text-size-14]
-    _ your@email.com [input-type-email border-1 round-8 inner-12 w-full]
-
-    / Message [bold text-size-14]
-    __ Tell us what you are building... [border-1 round-8 inner-12 w-full h-160]
-
-    _ [input-type-checkbox]
-    / I agree to the terms [text-size-13]
-
-    : Send message [bg-111111 text-color-white inner-y-12 inner-x-24 round-8 bold hover-bg-333 transition]
-} [flex col gap-12 inner-40 bg-ffffff border-1 border-color-eeeeee round-16 max-w-500]
+    {
+        s What is zoar?
+        t A markup language for building websites without writing CSS.
+    }
+    {
+        s Is it free?
+        t Yes, completely free to use.
+    }
+} [accordion outer-x-40]
 ```
+
+---
+
+## Modules
+
+Modules let you write a piece of UI once and reuse it across every page — navbars, footers, banners, anything.
+
+### Creating a Module
+
+Modules live in a `modules/` subfolder inside your project. Create one from the **Modules** panel in the editor (click **+**), or add a `modules/footer.zoar` file manually.
+
+```
+modules/
+├── navbar.zoar
+└── footer.zoar
+```
+
+### Using a Module
+
+Reference a module anywhere in a page using `@modules/name` on its own line:
+
+```
+@modules/navbar
+
+# Hello World
+
+t Welcome to my site.
+
+@modules/footer
+```
+
+### Rules
+
+- Module name = filename without `.zoar` (e.g. `footer.zoar` → `@modules/footer`)
+- Modules can contain any zoar syntax — headings, blocks, buttons, images, etc.
+- Modules can **not** be nested
+- Frontmatter (`----` block) inside a module is ignored
+- On export, modules are inlined into every page — no separate files in the ZIP
 
 ---
 
@@ -358,10 +506,14 @@ tablet-grid-cols-2        @media (max-width: 1024px)
 
 ```
 my-project/
-├── home.sd        →  /
-├── about.sd       →  /about
-├── contact.sd     →  /contact
-└── blog.sd        →  /blog
+├── home.zoar        →  /
+├── about.zoar       →  /about
+├── contact.zoar     →  /contact
+├── favicon.svg
+├── logo.png
+└── assets/
+    ├── hero.jpg
+    └── roboto.woff2
 ```
 
 ---
@@ -371,9 +523,6 @@ my-project/
 - **The Syntax** — Free to use for personal and commercial projects.
 - **The Software** — Distributed as-is.
 - **The Source** — Currently private. Open-source release planned.
-
-If you build a tool using the Skydev syntax, please credit the original specification.
-Any output generated by this tool should ideally retain a `// Built with Skydev` comment.
 
 ---
 
