@@ -518,28 +518,4 @@ my-project/
 
 ---
 
-## Licensing
-
-zoar is a project by Shepherd Games Private Limited, architected by Sudeep Vundurty.
-
-### 1. The zoar Syntax & Specification
-
-The zoar syntax — the specific shorthand language rules, keywords, and logic — is licensed under the **Creative Commons Attribution-NoDerivatives 4.0 International (CC BY-ND 4.0)**.
-
-You are free to use the syntax for personal or commercial projects, under the following terms: you must give appropriate credit and provide a link to zoar.dev. If you build a tool using this syntax, you may not distribute modified versions of the specification logic.
-
-### 2. Website & Documentation Assets
-
-The public-facing HTML, CSS, and Markdown files are licensed under the **MIT License**.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software.
-
-### 3. The zoar Rendering Engine
-
-The core processing logic, parser, and rendering engine are **not licensed for public use**.
-
-All Rights Reserved. Shepherd Games Private Limited retains full ownership and copyright of the source code. No part of the core engine may be reproduced, reverse-engineered, or redistributed without express written permission.
-
----
-
 © 2026 Shepherd Games Private Limited
