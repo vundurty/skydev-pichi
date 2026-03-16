@@ -32,6 +32,7 @@ Built-in editor features include:
 - Live preview modes: `Default`, `Desktop`, `Tablet`, `Mobile`
 - File formatting, save/save-as, export
 - Asset and custom font support
+- Module props/defaults highlighting and starter snippets
 
 ---
 
@@ -63,6 +64,89 @@ Modules:
 ```
 
 `@modules/<name>` injects `modules/<name>.zoar` content.
+
+Modules can also receive props:
+
+```zoar
+@modules/card with {
+  title: Hello
+  href: /about
+}
+```
+
+---
+
+## Module Props
+
+Reusable modules can accept values from the page where they are used.
+
+### Passing Props
+
+```zoar
+@modules/card with {
+  title: Search engine optimization
+  image: assets/demo.png
+  href: /services/seo
+}
+```
+
+### Using Props Inside A Module
+
+```zoar
+{
+  t @title
+  > @image
+  ~ Learn more -> @href
+}
+```
+
+### Defaults
+
+Defaults live inside the module file and are used only when the caller does not pass that prop:
+
+```zoar
+@default title: Hello
+@default href: /about
+
+{
+  t @title
+  ~ Learn more -> @href
+}
+```
+
+Precedence:
+
+1. Value passed in `with { ... }`
+2. Module `@default`
+3. Unresolved `@prop` remains visible
+
+### Style Props
+
+Props can also supply style tokens:
+
+```zoar
+@default cardStyle: bg-color-F3F3F3 round-40 border-1
+
+{
+  t @title
+} [@cardStyle]
+```
+
+They can be mixed with regular style tokens too:
+
+```zoar
+{
+  t @title
+} [flex row @cardStyle]
+```
+
+Current props/defaults rules:
+
+- props use `key: value`
+- one prop per line
+- values are currently single-line text
+- prop names should start with a letter or underscore
+- prop names may contain letters, numbers, `_`, and `-`
 
 ---
 
@@ -424,4 +508,3 @@ lang: en
 - Parser is strict for `f` blocks: they must resolve to `f { ... } -> target`.
 - Deprecated text tokens are ignored in current builds (use `t-*` equivalents).
 - Unknown style tokens are preserved as class names for custom CSS hooks.
-

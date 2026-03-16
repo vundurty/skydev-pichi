@@ -1,5 +1,15 @@
 # Changelog
 
+## Release 9
+
+- Added reusable module props with `@modules/name with { ... }`.
+- Added `@prop` substitution inside module content for text, links, images, and style blocks.
+- Added module-side fallback values with `@default key: value`.
+- Fixed standalone module preview so `@default` directives are applied and not rendered as visible text.
+- Added parser coverage for props, defaults, standalone module preview, and style-prop usage.
+- Improved editor authoring support with highlighting/snippets for `@modules`, `@default`, and prop references.
+- Updated service worker cache keys to `zoar-app-v9` and `zoar-runtime-v9`.
+
 ## Release 8
 
 - Renamed parser references to `zoarParser` and aligned parser/export behavior.
